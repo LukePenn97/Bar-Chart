@@ -2,10 +2,59 @@
   <script src="jquery-3.6.0.js"></script>
   <script src="barChart.js"></script>
 </head>
+
 <body>
-  <button id = "start">start</button>
-  <button id = "stop">stop</button>
-  <p>
-    hello world
-  </p>
+  <canvas id="myCanvas" width="200" height="100" style="border:1px solid #c3c3c3;">
+  </canvas>
+
+  <script>
+    var canvas = document.getElementById("myCanvas");
+    let data = [1,2,3,4,5,6,7,8,9];
+    function drawBarChart(data, options, element){
+      var ctx = element.getContext("2d");
+      ctx.textBaseline = "middle";
+      ctx.textAlign = "center";
+      element.width = options.width;
+      element.height = options.height;
+      let textPosition = 0;
+      let base = element.height - 10;
+      let barWidth = options.width/data.length/2;
+      let barSpace = barWidth;
+      let maxVal = largestVal(data);
+      //we want the largest value to fill 90% of the height,
+      //and all other values to be in relation to that
+      for(let i = 0; i < data.length; i++){
+        ctx.fillStyle = "Red";
+        ctx.fillRect(i*(barWidth+barSpace), element.height - 10, barWidth, -data[i]);
+        ctx.fillStyle = "Black";
+        
+        if(options.textPos === "top"){
+          textPosition = data[i]*10+10
+        }
+        if(options.textPos === "middle"){
+          textPosition = data[i]*10/2+5
+        }
+        if(options.textPos === "bottom"){
+          textPosition = 0
+        }
+        ctx.fillText(data[i].toString(), i*(barWidth+barSpace)+(barWidth/2), element.height - textPosition);
+      }
+    }
+    let options = {
+      width: 500,
+      height: 500,
+      textPos: "bottom"
+    }
+    function largestVal(data){
+      let largest = 0;
+      for(d of data){
+        if(d > largest){
+          largest = d;
+        }
+      }
+      return largest;
+    }
+    drawBarChart(data, options, canvas);
+  </script>
+
 </body>
