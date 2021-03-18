@@ -21,11 +21,12 @@
       let barWidth = options.width/data.length/2;
       let barSpace = barWidth;
       let maxVal = largestVal(data);
+      let constant = element.height*0.9/maxVal;
       //we want the largest value to fill 90% of the height,
       //and all other values to be in relation to that
       for(let i = 0; i < data.length; i++){
         ctx.fillStyle = "Red";
-        ctx.fillRect(i*(barWidth+barSpace), element.height - 10, barWidth, -data[i]);
+        ctx.fillRect(i*(barWidth+barSpace), element.height - 10, barWidth, -data[i]*constant);
         ctx.fillStyle = "Black";
         
         if(options.textPos === "top"){
@@ -42,7 +43,7 @@
     }
     let options = {
       width: 500,
-      height: 500,
+      height: 200,
       textPos: "bottom"
     }
     function largestVal(data){
