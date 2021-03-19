@@ -8,44 +8,59 @@
   </canvas>
 
   <script>
-    var canvas = document.getElementById("myCanvas");
-    let data = [1,2,3,4,5,6,7,8,9];
+    let canvas = document.getElementById("myCanvas");
+    let data = [101,22,3,44,55,13,22,7,65];
+
     function drawBarChart(data, options, element){
-      var ctx = element.getContext("2d");
-      ctx.textBaseline = "middle";
-      ctx.textAlign = "center";
+      
+      let ctx = element.getContext("2d");
       element.width = options.width;
       element.height = options.height;
-      let textPosition = 0;
-      let base = element.height - 10;
-      let barWidth = options.width/data.length/2;
-      let barSpace = barWidth;
-      let maxVal = largestVal(data);
-      let constant = element.height*0.9/maxVal;
-      //we want the largest value to fill 90% of the height,
-      //and all other values to be in relation to that
+      
+
       for(let i = 0; i < data.length; i++){
-        ctx.fillStyle = "Red";
-        ctx.fillRect(i*(barWidth+barSpace), element.height - 10, barWidth, -data[i]*constant);
-        ctx.fillStyle = "Black";
-        
-        if(options.textPos === "top"){
-          textPosition = data[i]*10+10
-        }
-        if(options.textPos === "middle"){
-          textPosition = data[i]*10/2+5
-        }
-        if(options.textPos === "bottom"){
-          textPosition = 0
-        }
-        ctx.fillText(data[i].toString(), i*(barWidth+barSpace)+(barWidth/2), element.height - textPosition);
+        drawBar(data, options, element, ctx, i);
+      }
+
+      drawAxis(data, options, element, ctx);
+
+    }
+
+
+
+
+
+
+    function drawBar(data, options, element, ctx, index){
+      let textPosition = checkTextPos(options.textPos);
+      let maxVal = largestVal(data);
+      let constant = options.innerHeight()/maxVal;
+      let totalWidth = element.width*0.8    
+      let barSpace;
+      if(options.barSpace === "default"){
+        barSpace = options.innerWidth()/data.length/2;
+      } else {
+        barSpace = options.barSpace;
+      }
+      let barWidth = options.innerWidth()/data.length - barSpace;
+
+      ctx.textBaseline = "middle";
+      ctx.textAlign = "center";
+      ctx.fillStyle = options.fillColour;
+      ctx.fillRect(index*(barWidth+barSpace)+(options.xGap())+barSpace, element.height - options.yGap(), barWidth, -data[index]*constant);        
+      ctx.fillStyle = options.textColour;
+      ctx.fillText(data[index].toString(), index*(barWidth+barSpace)+(options.xGap())+barWidth/2+barSpace, element.height - data[index]*constant*textPosition - options.yGap() - options.bump());
+    }
+
+    function drawAxis(data, options, element, ctx){
+      ctx.textAlign = "right";
+      ctx.textBaseline = "left";
+      let maxVal = largestVal(data);
+      for(let i = 10; i >= 0; i--){
+        ctx.fillText((maxVal*i*0.1).toFixed(1).toString(), options.xGap(), (element.height - (options.yGap()+options.innerHeight()*i*0.1)));
       }
     }
-    let options = {
-      width: 500,
-      height: 200,
-      textPos: "bottom"
-    }
+
     function largestVal(data){
       let largest = 0;
       for(d of data){
@@ -55,6 +70,50 @@
       }
       return largest;
     }
+    function checkTextPos(pos){
+      let textPosition = 0;
+      if(pos === "top"){
+          textPosition = 1
+        }
+      if(pos === "middle"){
+          textPosition = 0.5
+        }
+      if(pos=== "bottom"){
+          textPosition = 0
+        }
+      return textPosition;
+    }
+    
+    let options = {
+      width: 500,
+      height: 300,
+      barSpace: 20,
+      textPos: "bottom",
+      fillColour: "Pink",
+      textColour: "Black",
+      widthMultiplier: 0.8,
+      heightMultiplier: 0.5,
+      bump: function(){
+        if(this.textPos === "top"){
+          return 5;
+        }else if(this.textPos === "bottom"){
+          return -5;
+        }else{
+          return 0;
+        }
+      },
+      innerWidth: function(){
+        return this.width * this.widthMultiplier;
+      },
+      innerHeight: function(){
+        return this.height * this.heightMultiplier;
+      },
+      xGap: function(){
+        return (this.width-this.innerWidth())/2},
+      yGap: function(){
+        return (this.height-this.innerHeight())/2},
+    }
+
     drawBarChart(data, options, canvas);
   </script>
 
