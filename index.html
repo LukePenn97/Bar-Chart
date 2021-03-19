@@ -9,29 +9,32 @@
 
   <script>
     let canvas = document.getElementById("myCanvas");
-    let data = [101,22,3,44,55,13,22,7,65];
+    let data = [101,22,3,44,55];
+    let dataLabels = ["first", "second","third","fourth","fifth"];
 
     function drawBarChart(data, options, element){
       
       let ctx = element.getContext("2d");
       element.width = options.width;
       element.height = options.height;
-      
 
       for(let i = 0; i < data.length; i++){
-        drawBar(data, options, element, ctx, i);
+        drawBar(data, options, element, ctx, i, dataLabels);
       }
 
       drawAxis(data, options, element, ctx);
+      drawTitle(options, element, ctx);
 
     }
 
+    function drawTitle(options, element, ctx){
+      ctx.textBaseline = "middle";
+      ctx.textAlign = "center";
+      ctx.fillText(options.title, options.width/2, 20);
+    }
 
 
-
-
-
-    function drawBar(data, options, element, ctx, index){
+    function drawBar(data, options, element, ctx, index, dataLabels){
       let textPosition = checkTextPos(options.textPos);
       let maxVal = largestVal(data);
       let constant = options.innerHeight()/maxVal;
@@ -50,6 +53,8 @@
       ctx.fillRect(index*(barWidth+barSpace)+(options.xGap())+barSpace, element.height - options.yGap(), barWidth, -data[index]*constant);        
       ctx.fillStyle = options.textColour;
       ctx.fillText(data[index].toString(), index*(barWidth+barSpace)+(options.xGap())+barWidth/2+barSpace, element.height - data[index]*constant*textPosition - options.yGap() - options.bump());
+      ctx.fillText(dataLabels[index], index*(barWidth+barSpace)+(options.xGap())+barWidth/2+barSpace, element.height - options.yGap() + 20);
+
     }
 
     function drawAxis(data, options, element, ctx){
@@ -83,16 +88,18 @@
         }
       return textPosition;
     }
+
     
     let options = {
-      width: 500,
-      height: 300,
-      barSpace: 20,
+      width: 900,
+      height: 500,
+      barSpace: 50,
       textPos: "bottom",
       fillColour: "Pink",
       textColour: "Black",
       widthMultiplier: 0.8,
-      heightMultiplier: 0.5,
+      heightMultiplier: 0.8,
+      title: "My Bar Chart",
       bump: function(){
         if(this.textPos === "top"){
           return 5;
@@ -111,10 +118,11 @@
       xGap: function(){
         return (this.width-this.innerWidth())/2},
       yGap: function(){
-        return (this.height-this.innerHeight())/2},
+        return (this.height-this.innerHeight())/2}
     }
-
+    
     drawBarChart(data, options, canvas);
+    
   </script>
-
+  
 </body>
