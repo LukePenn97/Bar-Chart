@@ -88,3 +88,8 @@ To implement:
 
 ### Resources
 
+https://www.w3schools.com/
+https://developer.mozilla.org/en-US/docs/Web/JavaScript
+https://stackoverflow.com/
+
+# Thanks for reading!
