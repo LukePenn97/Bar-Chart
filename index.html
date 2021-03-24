@@ -2,49 +2,11 @@
   <script src="jquery-3.6.0.js"></script>
   <script src="barChart.js"></script>
   <link rel="stylesheet" href="barStyle.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <div class="header">
+    <h1>Luke's Bar-Chart Project</h1>
+    <p>Prep Stretch project for Lighthouse Labs Web Dev bootcamp.</p>
+  </div>
 </head>
 
-<body>
-  <canvas id="myCanvas" width="200" height="100" style="border:1px solid #c3c3c3;">
-  </canvas>
-  <canvas id="myCanvas2" width="200" height="100" style="border:1px solid #c3c3c3;">
-  </canvas>
-  <canvas id="myCanvas3" width="200" height="100" style="border:1px solid #c3c3c3;">
-  </canvas>
-  <canvas id="myCanvas4" width="200" height="100" style="border:1px solid #c3c3c3;">
-  </canvas>
-
-  <script>
-    let canvas = getCanvas()
-    options.width = 600
-    options.heightMultiplier = 0.7;
-    drawBarChart(data, options, canvas);
-
-    options.width = 400
-    options.widthMultiplier = 0.4;
-    options.heightMultiplier = 0.6;
-    options.yAxisLabel = "Metric Tons of Pollution in Victoria";
-    options.title = "Pollution in Victoria BC By Year"
-    dataStack.labelColours.splice(2,3,"black","black","black");
-    let canvas2 = document.getElementById("myCanvas2");
-    drawBarChart(data, options, canvas2);
-
-
-    options.width = 500;
-    
-    options.displayValues = false;
-    options.axisNums = 3;
-    options.yAxisLabel = "Water Used";
-    options.title = "Amount of Water Used by Animal Agriculture vs Plant Based Alternatives"
-    let canvas3 = document.getElementById("myCanvas3");
-    drawBarChart(data, options, canvas3);
-
-
-    options.yAxisLabel = "Lighthouse Labs Student Professions";
-    options.title = "Job Titles of Lighthouse Labs Graduates"
-    let canvas4 = document.getElementById("myCanvas4");
-    drawBarChart(data, options, canvas4);
-
-  </script>
-  <input type="submit" name="submit" id="submit" value="Submit">
-</body>
+<body></body>
