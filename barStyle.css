@@ -1,3 +1,43 @@
+.header{
+  padding: 40px;
+  text-align: center;
+  background: #ee67a6;
+  color: white;
+  font-size: 30px;
+  font-family:'Times New Roman', Times, serif;
+  text-shadow: -1px 1px 0 #000,
+    1px 1px 0 #000,
+    1px -1px 0 #000,
+    -1px -1px 0 #000;
+  
+}
+body {
+  background-color:rgb(238, 229, 235);
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  background: #ff3091;
+  color: white;
+  text-align: center;
+  overflow: hidden;
+}
+li {
+  float:left;
+  border-right: 1px solid #bbb;
+}
+li a {
+  display: block;
+  padding: 10px;
+  background-color: #ff3091;
+  text-align: center;
+  color: white;
+  text-decoration: none;
+}
+li a:hover {
+  background-color: #02382d;
+}
 canvas {
   margin: auto;
   margin-top: 10px;
@@ -5,11 +45,51 @@ canvas {
   display: block;
   margin-left: auto;
   margin-right: auto;
+  background-color: azure;
 }
-.header{
-  padding: 40px;
+h2 {
   text-align: center;
-  background: #1abc9c;
-  color: white;
-  font-size: 30px;
+}
+label {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 5px;
+  display:inline-block;
+}
+#welcome {
+  text-align: center;
+  font-size: 20px;
+  font-family:'Times New Roman', Times, serif;
+}
+#makechart {
+  text-align: center;
+}
+#howto {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 20px;
+  font-family:'Times New Roman', Times, serif;
+  display: block;
+}
+.about {
+  text-align: center;
+}
+#aboutproject {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 20px;
+  font-family:'Times New Roman', Times, serif;
+  display: block;
+}
+#aboutme {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 20px;
+  font-family:'Times New Roman', Times, serif;
+  display: block;
 }

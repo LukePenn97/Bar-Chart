@@ -1,32 +1,3 @@
-$(document).ready(function () {
-  $("<canvas id='myCanvas' width='200' height='100' style='border:1px solid #c3c3c3;'></canvas>").appendTo('body')
-  $("<canvas id='myCanvas2' width='200' height='100' style='border:1px solid #c3c3c3;'></canvas>").appendTo('body')
-  $("<canvas id='myCanvas3' width='200' height='100' style='border:1px solid #c3c3c3;'></canvas>").appendTo('body')
-  $("<canvas id='myCanvas4' width='200' height='100' style='border:1px solid #c3c3c3;'></canvas>").appendTo('body')
-  const canvas = document.getElementById('myCanvas')
-  options.width = 600
-  options.heightMultiplier = 0.7
-  drawBarChart(dataStack1, options, canvas)
-
-  options.widthMultiplier = 0.6
-  options.heightMultiplier = 0.6
-  const canvas2 = document.getElementById('myCanvas2')
-  drawBarChart(dataStack2, options, canvas2)
-
-  options.width = 500
-  options.displayValues = false
-  options.axisNums = 3
-  const canvas3 = document.getElementById('myCanvas3')
-  drawBarChart(dataStack3, options, canvas3)
-
-  options.displayValues = true
-  options.width = 700
-  options.height = 400
-  options.axisNums = 6
-  const canvas4 = document.getElementById('myCanvas4')
-  drawBarChart(dataStack4, options, canvas4)
-})
-
 const dataStack1 = {
   data: [
     [160, 950, 300, 40, 25],
@@ -34,7 +5,7 @@ const dataStack1 = {
     [160, 950, 500, 60, 47],
     [160, 950, 600, 70, 58],
     [160, 950, 700, 80, 69],
-    [160, 950, 700, 80, 69]
+    [160, 950, 700, 80, 110]
   ],
   colours: ['LightPink', 'Pink', 'HotPink', 'PaleVioletRed', 'Orchid'],
   labels: ['October', 'November', 'December', 'January', 'February', 'March'],
@@ -45,17 +16,16 @@ const dataStack1 = {
 }
 const dataStack2 = {
   data: [
-    [21, 56, 87, 77, 250],
-    [16, 63, 88, 90, 360],
-    [44, 45, 97, 97, 470],
-    [32, 54, 99, 70, 580],
-    [35, 52, 109, 85, 690],
-    [23, 50, 107, 80, 696]
+    [21, 56, 87, 77],
+    [16, 63, 88, 90],
+    [44, 45, 97, 97],
+    [32, 54, 99, 70],
+    [35, 52, 109, 85]
   ],
-  colours: ['#cc3300', '#ff9900', '#cc9900', '#999966', '#669900'],
-  labels: ['2015', '2016', '2017', '2018', '2019', '2020'],
+  colours: ['#cc3300', '#ff9900', '#cc9900', '#999966'],
+  labels: ['2015', '2016', '2017', '2018', '2019'],
   labelColours: ['Black', 'Black', 'black', 'black', 'black', 'black'],
-  legend: ['Transportation', 'Fuel burning', 'Industrial', 'Agriculture', 'Marijuana Smoke'],
+  legend: ['Transportation', 'Fuel burning', 'Industrial', 'Agriculture'],
   yAxisLabel: 'Metric Tons of Pollution in Victoria',
   title: 'Pollution in Victoria BC By Year'
 }
@@ -116,8 +86,6 @@ function drawStackedBars (dataStack, options, element, ctx) {
     }
     maxVals.push(maxVal)
   }
-  drawAxis(maxVals, options, element, ctx, dataStack)
-
   maxVal = largestVal(maxVals)
   const constant = options.innerHeight() / maxVal
   let barSpace
@@ -128,7 +96,7 @@ function drawStackedBars (dataStack, options, element, ctx) {
     barSpace = options.barSpace
   }
   const barWidth = options.innerWidth() / dataStack.data.length - barSpace
-
+  drawAxis(maxVals, options, element, ctx, dataStack, barSpace)
   ctx.textBaseline = 'middle'
   ctx.textAlign = 'center'
 
@@ -163,17 +131,21 @@ function drawLegend (dataStack, options, ctx, element) {
   } else {
     barSpace = options.barSpace
   }
-  for (let i = 0; i < dataStack.legend.length; i++) {
-    ctx.fillStyle = dataStack.colours[dataStack.legend.length - 1 - i]
-    ctx.fillRect(options.width - options.xGap() + 30 - barSpace, i * 20 + options.height / 4, 10, 10)
-    ctx.fillStyle = options.textColour
-    ctx.fillText(dataStack.legend[dataStack.legend.length - 1 - i], options.width - options.xGap() + 50 - barSpace, i * 20 + options.height / 4 + 5)
+  if (dataStack.legend[0]) {
+    ctx.font = options.valueSize + 'px ' + options.valueFont
+    for (let i = 0; i < dataStack.legend.length; i++) {
+      ctx.fillStyle = dataStack.colours[dataStack.legend.length - 1 - i]
+      ctx.fillRect(options.width - options.xGap() + 30 - barSpace, i * 20 + options.yGap(), 10, 10)
+      ctx.fillStyle = options.textColour
+      ctx.fillText(dataStack.legend[dataStack.legend.length - 1 - i], options.width - options.xGap() + 50 - barSpace, i * 20 + options.yGap() + 5)
+    }
   }
 }
 
 function drawTitle (dataStack, element, ctx) {
   ctx.textBaseline = 'middle'
   ctx.textAlign = 'center'
+  ctx.font = options.titleSize + 'px ' + options.titleFont
   ctx.fillText(dataStack.title, element.width / 2, 20)
 }
 /*
@@ -201,15 +173,26 @@ function drawBars (data, options, element, ctx, dataLabels) {
   }
 }
 */
-function drawAxis (data, options, element, ctx, dataStack) {
+function drawAxis (data, options, element, ctx, dataStack, barSpace) {
   ctx.textAlign = 'right'
   ctx.textBaseline = 'left'
   ctx.fillStyle = options.textColour
   const maxVal = largestVal(data)
+  let yPos
+  ctx.font = options.valueSize + 'px ' + options.valueFont
   for (let i = options.axisNums; i >= 0; i--) {
-    ctx.fillText((maxVal * i * 10 / options.axisNums * 0.1).toFixed(1).toString(), options.xGap(), (element.height - (options.yGap() + options.innerHeight() * i * 10 / options.axisNums * 0.1)))
+    yPos = (element.height - (options.yGap() + options.innerHeight() * i * 10 / options.axisNums * 0.1))
+    ctx.fillText((maxVal * i * 10 / options.axisNums * 0.1).toFixed(1).toString(), options.xGap(), yPos)
+    if (options.displayGrid) {
+      ctx.beginPath()
+      ctx.moveTo(options.xGap(), yPos)
+      ctx.lineTo(options.width - options.xGap() - barSpace, yPos)
+      ctx.lineWidth = 0.1
+      ctx.stroke()
+    }
   }
   ctx.save()
+  ctx.font = options.titleSize + 'px ' + options.titleFont
   ctx.translate(options.xGap() / 2, options.height / 2)
   ctx.rotate(-Math.PI / 2)
   ctx.textAlign = 'center'
@@ -240,6 +223,10 @@ function checkTextPos (pos) {
   return textPosition
 }
 
+function addChart (dataStack, options, element, ctx) {
+
+}
+
 const options = {
   width: 700,
   height: 300,
@@ -252,6 +239,11 @@ const options = {
   axisNums: 5,
   displayTotals: true,
   displayValues: true,
+  displayGrid: true,
+  titleSize: '14',
+  titleFont: 'Arial',
+  valueSize: '10',
+  valueFont: 'Arial',
 
   bump: function () {
     if (this.textPos === 'top') {

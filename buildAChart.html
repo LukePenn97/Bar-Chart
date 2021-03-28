@@ -1,0 +1,318 @@
+<head>
+  <script src="jquery-3.6.0.js"></script>
+  <script src="barChart.js"></script>
+  <link rel="stylesheet" href="barStyle.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <div class="header">
+    <h1>Luke's Bar-Chart Project</h1>
+    <p>Prep Stretch Project for Lighthouse Labs Web Dev Bootcamp.</p>
+  </div>
+</head>
+<nav>
+  <ul>
+    <li><a href=index.html>Home</a></li>
+    <li><a href=about.html>About</a></li>
+    <li><a href=buildAChart.html>Make A Chart</a></li>
+  </ul>
+</nav>
+<h2 id="makechart">Welcome to the Make A Chart page!</h2>
+<p id="howto">
+  Here you can make your own stacked (or not) bar chart! <br>
+  To add new bars along the x axis, press the "+" button, and to remove press "-". To add a set of stacked bars, press <br>
+  "Add Set", and to remove press "Remove Set". You can choose your label name for each x axis bar, along with the label colour. <br>
+  Set name will be displayed as a legend along with the set colour, which will be the bar colour for each set. <br>
+  You also have options for bar spacing, text position (data numbers inside the bars), percentage width and height inside the canvas, <br>
+  number of y axis ticks, and whether you want to display totals and values on the chart. <br>
+  When you're ready, press "Create your chart"!
+</p>
+<form>
+  <section>
+    <fieldset>
+      <legend>Build your own Bar Chart!</legend>
+      <div>
+        <label for="width">Width</label>
+        <input type="width" name="width" id="width" size="5" value="600">
+        <label for="height">Height</label>
+        <input type="height" name="height" id="height" size="5" value="300">
+        <label for="title">Title: </label>
+        <input type="text" name="title" value="My Bar Chart">
+        <label for="yAxisLabel">Y Axis Label: </label>
+        <input type="text" name="yAxisLabel" value="Y Axis">
+      </div>
+    </fieldset>
+  </section>
+  <section>
+    <fieldset class="fSet">
+      <legend>Chart Data</legend>
+      <button class="addField">+</button>
+      <button class="removeField">-</button>
+      <button class="addSet">Add Set</button>
+      <button class="removeSet">Remove Set</button>
+    </fieldset>
+  </section>
+  <section>
+    <fieldset class="labelSet">
+      <legend>Labels and Colours</legend>
+      <div class="labelWrapper">
+        <label for="label0">Label Name --> 1:</label>
+        <input type="text" name="label0" size="8">
+      </div>
+      <div class="labelColourWrapper">
+        <label for="labelColour0">Label Colour -> 1:</label>
+        <input type="color" name="labelColour0" size="8" value="black">
+      </div>
+      <div class="legendWrapper">
+        <label for="legend0">Set Name -----> 1:</label>
+        <input type="text" name="legend0" size="8">
+      </div>
+      <div class="colourWrapper">
+        <label for="colour0">Set Colour ----> 1:</label>
+        <input type="color" name="colour0" size="8">
+      </div>
+    </fieldset>
+  </section>
+  <section>
+    <fieldset>
+      <legend>Options</legend>
+      <div class="options"> 
+        <label for="barSpace">Bar Space: </label>
+        <input type="text" name="barSpace" size="5" value="default">
+        <label for="textPos">Text Position: </label>
+        <select name="textPos">
+          <option value="middle">Middle</option>
+          <option value="top">Top</option>
+          <option value="bottom">Bottom</option>
+        </select>
+        <label for="widthMult">Inner Width: </label>
+        <input type="text" name="widthMult" size="5" value="0.6">
+        <label for="heightMult">Inner Height: </label>
+        <input type="text" name="heightMult" size="5" value="0.6">
+        <label for="axisNums"># of Y Axis Labels: </label>
+        <input type="text" name="axisNums" size="5" value="4">
+        <label for="displayTotals">Display Totals? </label>
+        <select name="displayTotals">
+          <option value="true">True</option>
+          <option value="false">False</option>
+        </select>
+        <label for="displayValues">Display Values? </label>
+        <select name="displayValues">
+          <option value="true">True</option>
+          <option value="false">False</option>
+        </select>
+        <label for="displayGrid">Display Grid? </label>
+        <select name="displayGrid">
+          <option value="true">True</option>
+          <option value="false">False</option>
+        </select>
+        <label for="titleSize">Title Size: </label>
+        <input type="text" name="titleSize" size="5" value="14">
+        <label for="titleFont">Title Font: </label>
+        <input type="text" name="titleFont" size="5" value="Arial">
+        <label for="valueSize">Value Size: </label>
+        <input type="text" name="valueSize" size="5" value="10">
+        <label for="valueFont">Value Font: </label>
+        <input type="text" name="valueFont" size="5" value="Arial">
+      </div>
+    </fieldset>
+  </section>
+  <section>
+    <div>
+      <button type="submit">Create your chart</button>
+    </div>
+  </section>
+</form>
+<div id="messages"></div>
+<script>
+  $(".fSet").append("<div class=\"dataWrapper0\">Set 1 data:</div>")
+  $(".dataWrapper0").append("<label for=\"data0\"> 1: </label><input type=\"text\" name=\"data0\" size=\"5\">")
+  let addField = $(".addField")
+  let addSet = $(".addSet")
+  let removeSet = $(".removeSet")
+  let removeField = $(".removeField")
+  let fieldCount = 0
+  let setCount = 0
+
+  $(addField).click(function(e){ 
+    e.preventDefault();
+    if(fieldCount < 11){
+      fieldCount++
+      for(let i = 0; i <= setCount; i++){
+        $(".dataWrapper"+i).append("<label for=\"data"+fieldCount+"\"> "+(fieldCount+1)+": </label><input type=\"text\" name=\"data"+fieldCount+"\" size=\"5\">")      
+      }
+      $(".labelWrapper").append("<label for=\"label"+fieldCount+"\"> "+(fieldCount+1)+": </label><input type=\"text\" name=\"label"+fieldCount+"\" size=\"8\">")
+      $(".labelColourWrapper").append("<label for=\"labelColour"+fieldCount+"\"> "+(fieldCount+1)+": </label><input type=\"color\" name=\"labelColour"+fieldCount+"\" size=\"8\" value=\"black\">")
+    }
+  });
+
+  $(addSet).click(function(e){ 
+    e.preventDefault();
+    if(setCount < 11){
+      setCount++
+      $(".fSet").append("<div class=\"dataWrapper"+setCount+"\">Set "+(setCount + 1)+" data:</div>")
+      for(let k = 0; k <= fieldCount; k++){
+        $(".dataWrapper"+setCount).append("<label for=\"data"+k+"\"> "+(k+1)+": </label><input type=\"text\" name=\"data"+k+"\" size=\"5\">")    
+      }
+      $(".legendWrapper").append("<label for=\"legend"+setCount+"\"> "+(setCount+1)+": </label><input type=\"text\" name=\"legend"+setCount+"\" size=\"8\">")
+      $(".colourWrapper").append("<label for=\"colour"+setCount+"\"> "+(setCount+1)+": </label><input type=\"color\" name=\"colour"+setCount+"\" size=\"8\">")
+    } 
+  });
+  
+  $(removeSet).click(function(e){  
+    e.preventDefault();
+    if(setCount > 0){ 
+      $(".dataWrapper"+setCount).remove()
+      $("label[for='legend"+setCount+"']").remove()
+      $("input[name='legend"+setCount+"']").remove()
+      $("label[for='colour"+setCount+"']").remove()
+      $("input[name='colour"+setCount+"']").remove()
+      setCount--
+    } 
+  });
+  let lastField;
+  
+  $(removeField).click(function(e){ 
+    e.preventDefault();
+    if(fieldCount > 0){
+      $("label[for='data"+fieldCount+"']").remove()
+      $("input[name='data"+fieldCount+"']").remove()
+      $("label[for='label"+fieldCount+"']").remove()
+      $("input[name='label"+fieldCount+"']").remove()
+      $("label[for='labelColour"+fieldCount+"']").remove()
+      $("input[name='labelColour"+fieldCount+"']").remove()
+      fieldCount--
+    } 
+  });
+  let isCanvas = false;
+  const form = document.forms[0];
+  form.addEventListener("submit", function(event) {
+    event.preventDefault()
+    const formData = new FormData(this)
+
+    let newDataStack1 = {
+      data: [],
+      labels: [],
+      labelColours: [],
+      legend: [],
+      colours: [],
+      yAxisLabel: "",
+      title: ""
+    }
+    if(isCanvas){
+      $("#newCanvas").remove()
+    }
+    isCanvas = false
+    let widthAndHeight = []
+    let titles = []
+    let col = 0
+    let index = 0;
+    let firstRun = true
+    let optionCount = 1;
+    newDataStack1.data[col] = []
+
+    for (const formElement of formData) {
+      if(index < 2){
+        widthAndHeight.push(formElement[1])
+      }
+      else if(index < 4){
+        titles.push(formElement[1])
+      }
+      else if(index < (setCount+1)*(fieldCount+1)+4){
+        newDataStack1.data[col].push(Number(formElement[1]))
+      }
+      else if(index < (setCount+1)*(fieldCount+1)+4+fieldCount+1){
+        newDataStack1.labels.push(formElement[1])
+      }
+      else if(index < (setCount+1)*(fieldCount+1)+4+fieldCount+fieldCount+2){
+        newDataStack1.labelColours.push(formElement[1])
+      }
+      else if(index < (setCount+1)*(fieldCount+1)+4+fieldCount+fieldCount+2+setCount+1){
+        newDataStack1.legend.push(formElement[1])
+      }
+      else if(index < (setCount+1)*(fieldCount+1)+4+fieldCount+fieldCount+2+setCount+setCount+2){
+        newDataStack1.colours.push(formElement[1])
+      }
+      else if(index < (setCount+1)*(fieldCount+1)+4+fieldCount+fieldCount+2+setCount+setCount+2+12){
+        switch(optionCount){
+          case 1: 
+            options.barSpace = formElement[1]
+            break
+          case 2: 
+            options.textPos = formElement[1]
+            break
+          case 3: 
+            options.widthMultiplier = formElement[1]
+            break
+          case 4: 
+            options.heightMultiplier = formElement[1]
+            break
+          case 5: 
+            options.axisNums = formElement[1]
+            break
+          case 6: 
+            
+            if(formElement[1] === 'true'){
+              options.displayTotals = true
+            }
+            else if(formElement[1] === 'false'){
+              options.displayTotals = false
+            }
+            break
+          case 7: 
+            if(formElement[1] === 'true'){
+              options.displayValues = true
+            }
+            else if(formElement[1] === 'false'){
+              options.displayValues = false
+            }
+            break
+          case 8: 
+            if(formElement[1] === 'true'){
+              options.displayGrid = true
+            }
+            else if(formElement[1] === 'false'){
+              options.displayGrid = false
+            }
+            break
+          case 9:
+            options.titleSize = formElement[1]
+            break
+          case 10:
+            options.titleFont = formElement[1]
+            break
+          case 11:
+            options.valueSize = formElement[1]
+            break
+          case 12:
+            options.valueFont = formElement[1]
+            break
+        }
+        optionCount++
+      }
+      if(col >= fieldCount){
+        col = 0;
+        firstRun = false    
+      }else if(index >= 4){
+        col++
+        if(firstRun){
+          newDataStack1.data[col] = []
+        }   
+      }
+      index++
+    }
+
+    $("<canvas id='newCanvas' width='100' height='50' style='border:1px solid #c3c3c3;'></canvas>").appendTo('body')
+    //$("#messages").append(options.titleSize + ' ' + options.titleFont)
+    //$("#messages").append(options.titleFont)
+    isCanvas = true
+    options.width = widthAndHeight[0]
+    options.height = widthAndHeight[1]
+    newDataStack1.title = titles[0]
+    newDataStack1.yAxisLabel = titles[1]
+    const newCanvas1 = document.getElementById('newCanvas')
+    drawBarChart(newDataStack1, options, newCanvas1)
+    
+  })
+</script>
+<body>
+
+</body>

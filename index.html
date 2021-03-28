@@ -5,8 +5,60 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <div class="header">
     <h1>Luke's Bar-Chart Project</h1>
-    <p>Prep Stretch project for Lighthouse Labs Web Dev bootcamp.</p>
+    <p>Prep Stretch Project for Lighthouse Labs Web Dev Bootcamp.</p>
   </div>
 </head>
+<nav>
+  <ul>
+    <li><a href=index.html>Home</a></li>
+    <li><a href=about.html>About</a></li>
+    <li><a href=buildAChart.html>Make A Chart</a></li>
+  </ul>
+</nav>
+<div class="homeText">
+  <h2>Welcome!</h2>
+  <p id="welcome">
+    This is my first stretch project for the course. <br>
+    Below you can find some examples of stacked bar charts that I made, and if you navigate to the <br>
+    Make A Chart page, you can find a bonus section where you can make your own chart! Enjoy!
+  </p>
+</div>
+<body>
+  <script>
+    $(document).ready(function () {
+      $("<canvas id='myCanvas' width='200' height='100' style='border:1px solid #c3c3c3;'></canvas>").appendTo('body')
+      $("<canvas id='myCanvas2' width='200' height='100' style='border:1px solid #c3c3c3;'></canvas>").appendTo('body')
+      $("<canvas id='myCanvas3' width='200' height='100' style='border:1px solid #c3c3c3;'></canvas>").appendTo('body')
+      $("<canvas id='myCanvas4' width='200' height='100' style='border:1px solid #c3c3c3;'></canvas>").appendTo('body')
+      const canvas = document.getElementById('myCanvas')
+      options.displayValues = false
+      options.width = 600
+      options.heightMultiplier = 0.7
+      drawBarChart(dataStack1, options, canvas)
 
-<body></body>
+      options.width = 650;
+      options.displayValues = true
+      options.widthMultiplier = 0.6
+      options.heightMultiplier = 0.6
+      options.axisNums = 4
+      options.displayTotals = false;
+      const canvas2 = document.getElementById('myCanvas2')
+      drawBarChart(dataStack2, options, canvas2)
+
+      options.width = 500
+      options.displayValues = false
+      options.axisNums = 3
+      options.displayTotals = true;
+      const canvas3 = document.getElementById('myCanvas3')
+      drawBarChart(dataStack3, options, canvas3)
+
+      options.displayValues = true
+      options.width = 700
+      options.height = 400
+      options.axisNums = 6
+      const canvas4 = document.getElementById('myCanvas4')
+      drawBarChart(dataStack4, options, canvas4)
+    })
+  </script>
+</body>
+<footer></footer>

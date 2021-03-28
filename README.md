@@ -80,11 +80,11 @@ No known bugs, some issues include being able to size the graph so that it is un
 ### Roadmap
 
 To implement:
-- text fields to generate new graphs within the site
+~~ text fields to generate new graphs within the site ~~
 - sliders to adjust width and height
 - functions to enable removing/adding new charts
 - better y axis labelling
-- pretty up the site with a nice header, maybe a navigation section to an about page and a chart creator page
+~~ pretty up the site with a nice header, maybe a navigation section to an about page and a chart creator page ~~
 
 ### Resources
 
